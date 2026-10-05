@@ -1,4 +1,4 @@
-# ~WeatherMap Project~
+# WeatherMap Project
 
 ~ web advanced project 2
 ~ ايثار عماد الدين احمد - تقانة معلومات
