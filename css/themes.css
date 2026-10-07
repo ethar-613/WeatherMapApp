@@ -1,0 +1,22 @@
+/* style variables for the app to be consistance looking */
+/* will be soft with shades of blue and violet */
+
+:root {
+  --bg-1: #eaf1ff;
+  --bg-2: #f1ecff;
+  --surface: #ffffff;
+  --blue-light: #c7dafd;
+  --blue: #5b8def;
+  --blue-dark: #2f4fa8;
+  --violet-light: #e3dcff;
+  --violet: #8b7cf6;
+  --violet-dark: #5b3fd0;
+  --navy: #1e2a5a;
+  --text: #2b2f4a;
+  --muted: #6b6f93;
+  --grid: #e1e6f7;
+  --danger-bg: #fdecef;
+  --danger-border: #e0607a;
+  --danger-text: #7a2236;
+  --shadow: 0 6px 18px rgba(91, 63, 208, 0.15);
+}

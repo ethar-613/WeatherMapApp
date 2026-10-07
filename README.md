@@ -17,3 +17,4 @@
 
 ## How to run(on XAMPP):
 
+``` http://localhost/wheatherMapAPP/ ```
