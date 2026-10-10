@@ -17,4 +17,4 @@
 
 ## How to run(on XAMPP):
 
-``` http://localhost/wheatherMapAPP/ ```
+''' http://localhost/wheatherMapAPP/ '''
