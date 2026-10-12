@@ -16,6 +16,10 @@
     <header>
         <h1>WeatherMap</h1>
         <p class="subtitle">search for any city on the world to see its weather on the map!</p>
+        <div class="key-bar">
+            <button id="key-btn" type="button" class="btn btn-outline btn-sm">API key setup</button>
+            <span id="key-state" class="key-state" aria-live="polite"></span>
+        </div>
     </header>
 
     <main>
@@ -41,6 +45,26 @@
     <footer>
         <span>Weather Data by OpenWeatherMap &middot; Map by OpenStreetMap &amp; Leaflet</span>
     </footer>
+
+
+  <dialog id="key-dialog" class="dialog" aria-labelledby="key-dialog-title">
+    <div class="dialog-body">
+      <h2 id="key-dialog-title">API key setup</h2>
+      <p>Enter your free OpenWeatherMap API key. It is kept only in this browser session and is never saved in the project files.
+         Don't have one? <a href="https://home.openweathermap.org/api_keys" target="_blank" rel="noopener">Get a key</a>.</p>
+      <form id="key-form" novalidate>
+        <label for="key-input" class="visually-hidden">OpenWeatherMap API key</label>
+        <input id="key-input" type="password" placeholder="Paste your API key" autocomplete="off" spellcheck="false">
+        <p id="key-msg" class="dialog-msg" role="alert"></p>
+        <div class="dialog-actions">
+          <button id="key-remove" type="button" class="btn btn-outline btn-sm" hidden>Remove key</button>
+          <button id="key-cancel" type="button" class="btn btn-outline btn-sm">Cancel</button>
+          <button type="submit" class="btn btn-sm">Save key</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module" src="js/app.js"></script>
