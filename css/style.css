@@ -1,6 +1,10 @@
 *{ 
     box-sizing: border-box; 
 }
+[hidden] { 
+  display: none !important; 
+}
+
 
 body {
   margin: 0;
@@ -181,6 +185,31 @@ input[type="text"], input[type="password"]:focus{
 }
 
 
+
+/* Alerts */
+.alert {
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  gap: 0.75rem;
+  margin: 1rem 0; 
+  padding: 0.8rem 1rem;
+  color: var(--danger-text); 
+  background: var(--danger-bg);
+  border: 1px solid var(--danger-border); 
+  border-left-width: 5px; 
+  border-radius: 12px;
+}
+.alert-close { 
+  border: none; 
+  background: none; 
+  font-size: 1.25rem; 
+  line-height: 1; 
+  color: inherit; 
+  cursor: pointer; 
+}
+
+
 /* map section styling */
 .map-wrap { 
     position: relative; 
@@ -215,6 +244,11 @@ input[type="text"], input[type="password"]:focus{
   border: 5px solid var(--blue-light); 
   border-top-color: var(--violet);
   animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+   to { 
+    transform: rotate(360deg); 
+  } 
 }
 
 

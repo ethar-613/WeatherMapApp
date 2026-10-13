@@ -43,3 +43,37 @@ export function initKeyDialog() {
     $('#key-dialog').close();
   });
 }
+
+
+// ________________________________________________________________________________
+// Loading spinner
+export function showLoading(isLoading) {
+  $('#loader').hidden = !isLoading;
+  $('#search-btn').disabled = isLoading;
+}
+
+// ________________________________________________________________________________
+//Error cards 
+export function clearError() {
+  $('#alert-area').innerHTML = '';
+}
+
+export function showError(message) {
+  clearError();
+  const card = document.createElement('div');
+  card.className = 'alert';
+  card.setAttribute('role', 'alert');
+
+  const text = document.createElement('span');
+  text.textContent = message;
+
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'alert-close';
+  closeBtn.textContent = '×';
+  closeBtn.addEventListener('click', clearError);
+
+  card.append(text, closeBtn);
+  $('#alert-area').append(card);
+}
+

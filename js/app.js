@@ -3,24 +3,53 @@
 import { initMap } from './map.js';
 import * as ui from './ui.js'; 
 import { $ } from './helpers.js';
+import * as store from './storage.js';
 import { geocode, getWeather } from './api.js';
+
+
 
 
 const form = $('#search-form');
 const input = $('#city');
 
+let loading = false;
 
 initMap('map');
 ui.initKeyDialog();
 
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const text = input.value.trim();
-  if (!text) return;
-  try {
-    const place = await geocode(text);
-    const weather = await getWeather(place.lat, place.lon);
-    console.log(place, weather);
-  } catch (error) { console.error(error); }
-});
+// Run the search for city
+async function run(getPlace) {
+  if (loading) return;
 
+  if (!store.getApiKey()) {
+    ui.showError('Please add your OpenWeatherMap API key first (click "API key setup").');
+    ui.openKeyDialog();
+    return;
+  }
+
+  loading = true;
+  ui.clearError();
+  ui.showLoading(true);
+
+  try {
+    const place = await getPlace();                            // finds the coordinates, gives the place info [name, lat, lon]
+    const weather = await getWeather(place.lat, place.lon);    // get current weather
+    console.log(place, weather)
+  } catch (error) {
+    ui.showError(error.message); // showing the problem in an error card
+  } finally {
+    loading = false;
+    ui.showLoading(false);
+  }
+}
+
+// event listener for get weather button to get the weather for the city 
+form.addEventListener('submit', (event) => {
+  event.preventDefault(); // stop the page from reloading
+  const text = input.value.trim();
+  if (text === '') {
+    ui.showError('Please type a city name first.');
+    return;
+  }
+  run(() => geocode(text));
+});
