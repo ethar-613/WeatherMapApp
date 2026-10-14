@@ -17,8 +17,12 @@ body {
 }
 
 .visually-hidden{
-    position: absolute; width: 1px; height: 1px; overflow: hidden;
-    clip: rect(0 0 0 0); white-space: nowrap;
+    position: absolute; 
+    width: 1px; 
+    height: 1px; 
+    overflow: hidden;
+    clip: rect(0 0 0 0); 
+    white-space: nowrap;
 }
 
 header{
@@ -99,7 +103,8 @@ input[type="text"], input[type="password"]:focus{
 .btn:hover { 
     transform: translateY(-2px); 
     filter: brightness(1.05);
-    box-shadow: 2px 3px 10px 1px var(--violet-light), -2px -3px 10px 1px var(--violet-light) , 1px 1px 0px 0px var(--bg-2) inset ;
+    box-shadow: 2px 3px 10px 1px var(--violet-light), 
+    -2px -3px 10px 1px var(--violet-light) , 1px 1px 0px 0px var(--bg-2) inset ;
 }
 .btn:focus-visible { 
     outline: 3px solid var(--violet-light); 
@@ -251,6 +256,49 @@ input[type="text"], input[type="password"]:focus{
   } 
 }
 
+
+
+/* Popup card */
+.popup { 
+  text-align: center; 
+  min-width: 200px; 
+  font-family: 'PT Serif Caption', sans-serif; 
+}
+.popup-title { 
+  margin: 0; 
+  font-size: 1.1rem; 
+  color: var(--navy); 
+}
+.popup-main { 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+}
+.popup-icon { 
+  width: 64px; 
+  height: 64px; 
+}
+.popup-temp { 
+  font-size: 2rem; 
+  font-weight: 700; 
+  color: var(--violet-dark); 
+}
+.popup-desc { 
+  margin: 0 0 0.5rem; 
+  color: var(--muted); 
+}
+.popup-list { 
+  margin: 0 0 0.75rem; 
+  padding: 0; 
+  list-style: none; 
+  text-align: left; 
+}
+.popup-list li { 
+  display: flex; 
+  justify-content: space-between; 
+  padding: 0.15rem 0; 
+  border-bottom: 1px solid var(--grid); 
+}
 
 /* footer styling */
 footer { 

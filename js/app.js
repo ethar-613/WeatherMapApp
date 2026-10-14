@@ -1,8 +1,8 @@
 //the main file to run the app
 
-import { initMap } from './map.js';
+import { initMap, showPlace  } from './map.js';
 import * as ui from './ui.js'; 
-import { $ } from './helpers.js';
+import { $, placeLabel } from './helpers.js';
 import * as store from './storage.js';
 import { geocode, getWeather } from './api.js';
 
@@ -34,7 +34,10 @@ async function run(getPlace) {
   try {
     const place = await getPlace();                            // finds the coordinates, gives the place info [name, lat, lon]
     const weather = await getWeather(place.lat, place.lon);    // get current weather
-    console.log(place, weather)
+    const popup = ui.buildPopup(place, weather);
+    showPlace(place, popup);
+    input.value = placeLabel(place);
+
   } catch (error) {
     ui.showError(error.message); // showing the problem in an error card
   } finally {

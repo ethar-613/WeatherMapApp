@@ -1,9 +1,10 @@
 // here everything that changes the page: spinner, alerts, popup card and so
 
 
-import {$} from './helpers.js';
+import { $, capitalize , iconUrl, placeLabel } from './helpers.js';
 import {getApiKey, saveApiKey, clearApiKey } from './storage.js';
 
+// ________________________________________________________________________________
 // ________________________________________________________________________________
 //API key setup 
 function updateKeyState() {
@@ -46,12 +47,14 @@ export function initKeyDialog() {
 
 
 // ________________________________________________________________________________
+// ________________________________________________________________________________
 // Loading spinner
 export function showLoading(isLoading) {
   $('#loader').hidden = !isLoading;
   $('#search-btn').disabled = isLoading;
 }
 
+// ________________________________________________________________________________
 // ________________________________________________________________________________
 //Error cards 
 export function clearError() {
@@ -77,3 +80,25 @@ export function showError(message) {
   $('#alert-area').append(card);
 }
 
+// ________________________________________________________________________________
+// ________________________________________________________________________________
+//Popup card on the map
+export function buildPopup(place, w) {
+  const box = document.createElement('div');
+  box.className = 'popup';
+  box.innerHTML = `
+    <h3 class="popup-title">${placeLabel(place)}</h3>
+    <div class="popup-main">
+      <img class="popup-icon" src="${iconUrl(w.weather[0].icon)}" alt="${w.weather[0].description}">
+      <span class="popup-temp">${Math.round(w.main.temp)}°C</span>
+    </div>
+    <p class="popup-desc">${capitalize(w.weather[0].description)}</p>
+    <ul class="popup-list">
+      <li><span>Clouds</span><strong>${w.clouds.all}%</strong></li>
+      <li><span>Humidity</span><strong>${w.main.humidity}%</strong></li>
+      <li><span>Wind</span><strong>${w.wind.speed} m/s</strong></li>
+      <li><span>Feels like</span><strong>${Math.round(w.main.feels_like)}°C</strong></li>
+    </ul>`;
+
+  return box;
+}
