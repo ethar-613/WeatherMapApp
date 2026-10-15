@@ -299,6 +299,26 @@ input[type="text"], input[type="password"]:focus{
   padding: 0.15rem 0; 
   border-bottom: 1px solid var(--grid); 
 }
+.popup-actions { 
+  display: flex; 
+  gap: 0.5rem; 
+  justify-content: center; 
+  flex-wrap: wrap; 
+}
+.popup-actions .btn { 
+  padding: 0.4rem 0.8rem; 
+  font-size: 0.875rem; 
+  box-shadow: none; 
+}
+.btn-fb { 
+  background: #3b5998; 
+}
+.btn-soft { 
+  background: var(--violet-light); 
+  color: var(--violet-dark); 
+}
+
+
 
 /* footer styling */
 footer { 

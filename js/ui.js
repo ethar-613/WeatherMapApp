@@ -83,7 +83,7 @@ export function showError(message) {
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 //Popup card on the map
-export function buildPopup(place, w) {
+export function buildPopup(place, w, {onShare, onCopy}) {
   const box = document.createElement('div');
   box.className = 'popup';
   box.innerHTML = `
@@ -98,7 +98,21 @@ export function buildPopup(place, w) {
       <li><span>Humidity</span><strong>${w.main.humidity}%</strong></li>
       <li><span>Wind</span><strong>${w.wind.speed} m/s</strong></li>
       <li><span>Feels like</span><strong>${Math.round(w.main.feels_like)}°C</strong></li>
-    </ul>`;
+    </ul>
+    <div class="popup-actions">
+      <button type="button" class="btn btn-fb share-btn">Share on Facebook</button>
+      <button type="button" class="btn btn-soft copy-btn">Copy weather text</button>
+    </div>
+    `;
+
+    // for facebook share btn
+    box.querySelector('.share-btn').addEventListener('click', onShare);
+    // copy weather btn
+    const copyBtn = box.querySelector('.copy-btn');
+    copyBtn.addEventListener('click', async () => {
+    copyBtn.textContent = (await onCopy()) ? 'Copied!' : 'Copy failed';
+    setTimeout(() => { copyBtn.textContent = 'Copy weather text'; }, 2000);
+    });
 
   return box;
 }

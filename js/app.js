@@ -5,6 +5,8 @@ import * as ui from './ui.js';
 import { $, placeLabel } from './helpers.js';
 import * as store from './storage.js';
 import { geocode, getWeather } from './api.js';
+import { shareOnFacebook, copyWeatherText } from './share.js';
+
 
 
 
@@ -34,7 +36,10 @@ async function run(getPlace) {
   try {
     const place = await getPlace();                            // finds the coordinates, gives the place info [name, lat, lon]
     const weather = await getWeather(place.lat, place.lon);    // get current weather
-    const popup = ui.buildPopup(place, weather);
+    const popup = ui.buildPopup(place, weather, {
+      onShare: () => shareOnFacebook(place, weather),
+      onCopy: () => copyWeatherText(place, weather),
+    });
     showPlace(place, popup);
     input.value = placeLabel(place);
 
