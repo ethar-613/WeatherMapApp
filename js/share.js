@@ -2,7 +2,7 @@
 
 
 import { placeLabel } from './helpers.js';
-
+// _________________________________________________________________________________________
 //here the message to use for sharing and copying the waether info
 function weatherText(place, weather) {
   return `Weather in ${placeLabel(place)}: ${Math.round(weather.main.temp)}°C, ${weather.weather[0].description}. ` +

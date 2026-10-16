@@ -83,7 +83,7 @@ export function showError(message) {
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 //Popup card on the map
-export function buildPopup(place, w, {onShare, onCopy}) {
+export function buildPopup(place, w, {onShare, onCopy, onFavorite, isFavorite }) {
   const box = document.createElement('div');
   box.className = 'popup';
   box.innerHTML = `
@@ -102,6 +102,7 @@ export function buildPopup(place, w, {onShare, onCopy}) {
     <div class="popup-actions">
       <button type="button" class="btn btn-fb share-btn">Share on Facebook</button>
       <button type="button" class="btn btn-soft copy-btn">Copy weather text</button>
+      <button type="button" class="btn btn-soft fav-btn"></button>
     </div>
     `;
 
@@ -113,6 +114,44 @@ export function buildPopup(place, w, {onShare, onCopy}) {
     copyBtn.textContent = (await onCopy()) ? 'Copied!' : 'Copy failed';
     setTimeout(() => { copyBtn.textContent = 'Copy weather text'; }, 2000);
     });
+    // for adding favorite city
+    const favBtn = box.querySelector('.fav-btn');
+    const showFavText = (saved) => { favBtn.textContent = saved ? '★ Saved' : '☆ Add to favorites'; };
+    showFavText(isFavorite);
+    favBtn.addEventListener('click', () => showFavText(onFavorite()));
 
   return box;
+}
+
+
+// ________________________________________________________________________________
+// ________________________________________________________________________________
+//Favorites / history chips 
+export function renderChips(container, places, emptyText, onSelect, onRemove) {
+  container.innerHTML = '';
+  if (places.length === 0) {
+    container.innerHTML = `<p class="empty">${emptyText}</p>`;
+    return;
+  }
+  places.forEach((place) => {
+    const wrap = document.createElement('span');
+    wrap.className = 'chip-wrap';
+
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'chip';
+    chip.textContent = placeLabel(place);
+    chip.addEventListener('click', () => onSelect(place));
+    wrap.append(chip);
+
+    if (onRemove) { // favorites have a small x button to remove them
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'chip-x';
+      removeBtn.textContent = '×';
+      removeBtn.addEventListener('click', () => onRemove(place));
+      wrap.append(removeBtn);
+    }
+    container.append(wrap);
+  });
 }

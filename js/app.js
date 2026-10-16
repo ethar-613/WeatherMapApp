@@ -39,6 +39,12 @@ async function run(getPlace) {
     const popup = ui.buildPopup(place, weather, {
       onShare: () => shareOnFacebook(place, weather),
       onCopy: () => copyWeatherText(place, weather),
+      isFavorite: store.isFavorite(place),
+      onFavorite: () => {
+        const saved = store.toggleFavorite(place);
+        showLists();
+        return saved;
+      },
     });
     showPlace(place, popup);
     input.value = placeLabel(place);
@@ -61,3 +67,16 @@ form.addEventListener('submit', (event) => {
   }
   run(() => geocode(text));
 });
+
+
+// ____________________________________________________________________________________________
+// ____________________________________________________________________________________________
+//Favorites 
+const openPlace = (place) => run(() => place);
+
+function showLists() {
+  ui.renderChips($('#favorites'), store.getFavorites(), 'No favorites yet.', openPlace, (place) => {
+    store.toggleFavorite(place); // to remove from favorites
+    showLists();
+  });
+}

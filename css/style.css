@@ -320,6 +320,60 @@ input[type="text"], input[type="password"]:focus{
 
 
 
+
+/*Favorites */
+.lists { 
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 1rem; 
+  margin-bottom: 1rem; 
+}
+.list-block h2 { 
+  margin: 0 0 0.4rem; 
+  font-size: 1rem; 
+  color: var(--navy); 
+}
+
+.chips { 
+  display: flex; 
+  flex-wrap: wrap; 
+  gap: 0.5rem; 
+}
+.chip-wrap { 
+  display: inline-flex; 
+  align-items: center; 
+  background: var(--violet-light); 
+  border-radius: 999px; 
+}
+.chip, .chip-x {
+  border: none; 
+  background: none; 
+  font: inherit; 
+  font-size: 0.875rem;
+  color: var(--violet-dark); 
+  cursor: pointer;
+}
+.chip { 
+  padding: 0.3rem 0.8rem; 
+  border-radius: 999px; 
+  transition: background 0.2s; 
+}
+.chip:hover { 
+  background: var(--blue-light); 
+}
+.chip-x { 
+  padding: 0.3rem 0.6rem 0.3rem 0; 
+}
+.empty { 
+  margin: 0; 
+  font-size: 0.875rem; 
+  color: var(--muted); 
+}
+
+
+
+
+
 /* footer styling */
 footer { 
     text-align: center; 
