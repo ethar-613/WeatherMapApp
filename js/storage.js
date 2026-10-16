@@ -29,7 +29,6 @@ const sameCity = (a, b) => a.lat === b.lat && a.lon === b.lon;
 
 // _________________________________________________________________________________________
 // Favorites section
-
 export const getFavorites = () => load('wm_favorites', []);
 export const isFavorite = (place) => getFavorites().some((fav) => sameCity(fav, place));
 
@@ -44,3 +43,15 @@ export function toggleFavorite(place) {
   save('wm_favorites', favorites);
   return true;
 }
+
+
+//Search history, storing only last 10 cities
+export const getHistory = () => load('wm_history', []);
+
+export function addHistory(place) {
+  const history = getHistory().filter((item) => !sameCity(item, place)); // ensures no duplicates
+  history.unshift(place); // to show newest first
+  save('wm_history', history.slice(0, 10));
+}
+
+export const clearHistory = () => save('wm_history', []);

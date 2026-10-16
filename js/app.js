@@ -16,8 +16,7 @@ const input = $('#city');
 
 let loading = false;
 
-initMap('map');
-ui.initKeyDialog();
+
 
 // Run the search for city
 async function run(getPlace) {
@@ -47,6 +46,8 @@ async function run(getPlace) {
       },
     });
     showPlace(place, popup);
+    store.addHistory(place);
+    showLists();
     input.value = placeLabel(place);
 
   } catch (error) {
@@ -79,4 +80,13 @@ function showLists() {
     store.toggleFavorite(place); // to remove from favorites
     showLists();
   });
+  ui.renderChips($('#history'), store.getHistory(), 'No searches yet.', openPlace);
 }
+$('#clear-history').addEventListener('click', () => {
+  store.clearHistory();
+  showLists();
+});
+
+initMap('map');
+showLists();
+ui.initKeyDialog();
