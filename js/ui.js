@@ -155,3 +155,33 @@ export function renderChips(container, places, emptyText, onSelect, onRemove) {
     container.append(wrap);
   });
 }
+
+
+// ________________________________________________________________________________
+// ________________________________________________________________________________
+//Suggestions
+export function hideSuggestions() {
+  $('#suggestions').hidden = true;
+  $('#suggestions').innerHTML = '';
+}
+
+export function renderSuggestions(places, onPick) {
+  const box = $('#suggestions');
+  box.innerHTML = '';
+  if (places.length === 0) {
+    box.hidden = true;
+    return;
+  }
+  places.forEach((place) => {
+    const item = document.createElement('li');
+    item.textContent = `${place.name}, ${place.state ? place.state + ', ' : ''}${place.country}`;
+    item.addEventListener('click', () => onPick({ 
+      name: place.name, country: place.country, lat: place.lat, lon: place.lon 
+    }));
+    box.append(item);
+  });
+  box.hidden = false;
+}
+
+// redraw the chart when the window size changes
+window.addEventListener('resize', debounce(() => ui.drawChart(lastDays), 200));

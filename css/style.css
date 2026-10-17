@@ -86,6 +86,36 @@ input[type="text"]:focus, input[type="password"]:focus{
   box-shadow: 0 0 0 4px var(--violet-light);
 }
 
+
+/*Suggestions*/
+.suggestions {
+  position: absolute; 
+  top: calc(100% + 6px); 
+  left: 0; 
+  right: 0; 
+  z-index: 50;
+  margin: 0; 
+  padding: 0.4rem; 
+  list-style: none; 
+  max-height: 14rem; 
+  overflow-y: auto;
+  background: var(--surface); 
+  border-radius: 12px; 
+  box-shadow: var(--shadow);
+}
+.suggestions li {
+  padding: 0.5rem 0.75rem; 
+  border-radius: 8px; 
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.suggestions li:hover { 
+  background: var(--violet-light); 
+}
+
+
+
+
 /* buttons styling */
 .btn {
   appearance: none;

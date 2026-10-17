@@ -2,9 +2,9 @@
 
 import { initMap, showPlace  } from './map.js';
 import * as ui from './ui.js'; 
-import { $, placeLabel } from './helpers.js';
+import { $, placeLabel, debounce } from './helpers.js';
 import * as store from './storage.js';
-import { geocode, getWeather } from './api.js';
+import { geocode, getWeather , suggest  } from './api.js';
 import { shareOnFacebook, copyWeatherText } from './share.js';
 
 
@@ -30,6 +30,7 @@ async function run(getPlace) {
 
   loading = true;
   ui.clearError();
+  ui.hideSuggestions();
   ui.showLoading(true);
 
   try {
@@ -86,6 +87,38 @@ $('#clear-history').addEventListener('click', () => {
   store.clearHistory();
   showLists();
 });
+
+
+
+//cities suggestions
+const loadSuggestions = debounce(async (text) => {
+  if (loading) return;
+  try {
+    const places = await suggest(text);
+    ui.renderSuggestions(places, (place) => {
+      input.value = placeLabel(place);
+      run(() => place);
+    });
+  } catch {
+    ui.hideSuggestions(); // suggestions are optional, so just ignore any errors
+  }
+});
+
+input.addEventListener('input', () => {
+  const text = input.value.trim();
+  if (text.length < 3 || !store.getApiKey()) {
+    ui.hideSuggestions();
+    return;
+  }
+  loadSuggestions(text);
+});
+
+//to close suggestions when user click anywhere else
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('.search-area')) ui.hideSuggestions();
+});
+
+
 
 initMap('map');
 showLists();
