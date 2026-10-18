@@ -1,7 +1,7 @@
 // here everything that changes the page: spinner, alerts, popup card and so
 
 
-import { $, capitalize , iconUrl, placeLabel } from './helpers.js';
+import { $, capitalize , iconUrl, placeLabel , debounce , dayLabel} from './helpers.js';
 import {getApiKey, saveApiKey, clearApiKey } from './storage.js';
 
 // ________________________________________________________________________________
@@ -183,5 +183,17 @@ export function renderSuggestions(places, onPick) {
   box.hidden = false;
 }
 
-// redraw the chart when the window size changes
-window.addEventListener('resize', debounce(() => ui.drawChart(lastDays), 200));
+
+// ________________________________________________________________________________
+// ________________________________________________________________________________
+//5 days forecast
+export function renderForecast(place, days) {
+  $('#forecast').hidden = false;
+  $('#forecast-title').textContent = `five days forecast for ${placeLabel(place)}`;
+  $('#forecast-cards').innerHTML = days.map((day) => `
+    <div class="day">
+      <strong>${dayLabel(day.date)}</strong>
+      <img src="${iconUrl(day.icon)}" alt="${day.desc}">
+      <div><span class="maxTemp">${Math.round(day.max)}°</span> / <span class="minTemp">${Math.round(day.min)}°</span></div>
+    </div>`).join('');
+}

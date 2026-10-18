@@ -359,14 +359,21 @@ input[type="text"]:focus, input[type="password"]:focus{
   gap: 5px; 
   margin-bottom: 1rem; 
 }
+.list-block{
+  background: linear-gradient(to top, var(--violet-light), var(--blue-dark));
+  border:  2px var(--violet-dark) solid ;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: var(--shadow);
+}
 .list-block h2 { 
   margin: 0 0 0.4rem; 
   font-size: 1rem; 
-  color: var(--navy); 
+  color: var(--surface); 
 }
 .list-head { 
   display: flex; 
-  justify-content: space-between; 
+  justify-content:space-between; 
   align-items: baseline; 
 }
 .link-btn { 
@@ -374,7 +381,6 @@ input[type="text"]:focus, input[type="password"]:focus{
   border-radius: 10px; 
   background: var(--danger-bg); 
   padding: 5px;
-  margin: 0.5rem;
   font: inherit; 
   font-size: 0.875rem; 
   color: var(--danger-text); 
@@ -429,6 +435,47 @@ input[type="text"]:focus, input[type="password"]:focus{
 }
 
 
+
+/*Forecasts*/
+.card { 
+  margin-top: 1.5rem; 
+  padding: 1.25rem; 
+  background: var(--surface); 
+  border-radius: 16px; 
+  box-shadow: var(--shadow); 
+}
+.card h2 { 
+  margin: 0 0 1rem; 
+  font-size: 1.25rem; 
+  color: var(--navy); 
+}
+.forecast-cards { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); 
+  gap: 0.75rem; 
+  margin-bottom: 1rem; 
+}
+.day { 
+  text-align: center; 
+  padding: 0.6rem; 
+  background: var(--bg-1); 
+  border-radius: 12px; 
+}
+.day strong { 
+  display: block; 
+  color: var(--navy); 
+}
+.day img { 
+  width: 52px; 
+  height: 52px; 
+}
+.day .maxTemp { 
+  color: var(--violet-dark); 
+  font-weight: 700; 
+}
+.day .minTemp { 
+  color: var(--blue-dark); 
+}
 
 
 

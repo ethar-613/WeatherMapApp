@@ -2,9 +2,9 @@
 
 import { initMap, showPlace  } from './map.js';
 import * as ui from './ui.js'; 
-import { $, placeLabel, debounce } from './helpers.js';
+import { $, placeLabel, debounce, groupDaily } from './helpers.js';
 import * as store from './storage.js';
-import { geocode, getWeather , suggest  } from './api.js';
+import { geocode, getWeather , suggest, getForecast  } from './api.js';
 import { shareOnFacebook, copyWeatherText } from './share.js';
 
 
@@ -35,7 +35,10 @@ async function run(getPlace) {
 
   try {
     const place = await getPlace();                            // finds the coordinates, gives the place info [name, lat, lon]
-    const weather = await getWeather(place.lat, place.lon);    // get current weather
+    const weather = await getWeather(place.lat, place.lon);    // get current weather for this place
+    const forecast = await getForecast(place.lat, place.lon); // get five day forecast data for this place
+    let lastDays = null;
+
     const popup = ui.buildPopup(place, weather, {
       onShare: () => shareOnFacebook(place, weather),
       onCopy: () => copyWeatherText(place, weather),
@@ -46,7 +49,10 @@ async function run(getPlace) {
         return saved;
       },
     });
+    
     showPlace(place, popup);
+    lastDays = groupDaily(forecast.list); 
+    ui.renderForecast(place, lastDays);
     store.addHistory(place);
     showLists();
     input.value = placeLabel(place);

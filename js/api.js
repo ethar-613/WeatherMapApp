@@ -41,3 +41,5 @@ export async function geocode(query) {
 
 // coordinates to get weather
 export const getWeather = (lat, lon) => request(`/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric`);
+
+export const getForecast = (lat, lon) => request(`/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric`);
