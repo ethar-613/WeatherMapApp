@@ -364,7 +364,7 @@ input[type="text"]:focus, input[type="password"]:focus{
   border:  2px var(--violet-dark) solid ;
   border-radius: 10px;
   padding: 10px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 3px 4px rgba(64, 44, 146, 0.381);;
 }
 .list-block h2 { 
   margin: 0 0 0.4rem; 

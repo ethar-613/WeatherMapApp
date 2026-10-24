@@ -1,31 +1,39 @@
-// here everything that changes the page: spinner, alerts, popup card and so
+/**
+ *  this file everything that changes the page: spinner, alerts, popup card and so
+*/ 
 
 
-import { $, capitalize , iconUrl, placeLabel , debounce , dayLabel} from './helpers.js';
+import { $, capitalize , iconUrl, placeLabel , dayLabel} from './helpers.js';
 import {getApiKey, saveApiKey, clearApiKey } from './storage.js';
 
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 //API key setup 
+
+// updates the displayed status of the key according to if there is key stored or not
+// need no parameters and return nothing
 function updateKeyState() {
-  const hasKey = getApiKey() !== '';
+  const hasKey = getApiKey() !== ''; //true if thre is key stored, false if no key stored
   $('#key-state').textContent = hasKey ? 'Key saved for this session' : 'No key yet';
-  $('#key-state').classList.toggle('ok', hasKey);
-  $('#key-remove').hidden = !hasKey;
+  $('#key-state').classList.toggle('ok', hasKey); //add class "ok" for this element if hasKey is true, if it false then remove class "ok" form it
+  $('#key-remove').hidden = !hasKey; //display the remove key button only if no key stored
 }
 
+// open the dialog window with clean state. uses it on this file but exported so app.js call it if user tryed to search without key.
+// need no parameters and return nothing
 export function openKeyDialog() {
   $('#key-input').value = '';
   $('#key-msg').textContent = '';
   updateKeyState();
-  $('#key-dialog').showModal();
+  $('#key-dialog').showModal(); //opens the <dialog> on modal mode to let user focus on it
 }
 
+// this function to record dialog window events. it called once when the application starts
+// need no parameters and return nothing
 export function initKeyDialog() {
   updateKeyState();
   $('#key-btn').addEventListener('click', openKeyDialog);
   $('#key-cancel').addEventListener('click', () => $('#key-dialog').close());
-
   $('#key-remove').addEventListener('click', () => {
     clearApiKey();
     updateKeyState();
@@ -34,12 +42,16 @@ export function initKeyDialog() {
 
   $('#key-form').addEventListener('submit', (event) => {
     event.preventDefault();
-    const key = $('#key-input').value.trim();
+    const key = $('#key-input').value.trim(); //trim() to remove extra spaces
     if (key.length < 16) {
       $('#key-msg').textContent = 'Please enter a valid API key (OpenWeatherMap keys have 32 characters).';
       return;
     }
-    saveApiKey(key);
+    const saved = saveApiKey(key);
+    if(!saved){
+       $('#key-msg').textContent = 'Could not save the key, yur browser blocking the storage(private mode maybe?). please alow site data or use normal windw.';
+       return;
+    }
     updateKeyState();
     $('#key-dialog').close();
   });
@@ -49,18 +61,30 @@ export function initKeyDialog() {
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 // Loading spinner
+
+// this function useing to display the spinner and disables the search button while the request in progress
+// calling showLoading(true) before the request, and showLoading(false) called in the finally block
+// parameter "isLoading" is boolean value
+// return nothing
 export function showLoading(isLoading) {
-  $('#loader').hidden = !isLoading;
-  $('#search-btn').disabled = isLoading;
+  $('#loader').hidden = !isLoading; 
+  $('#search-btn').disabled = isLoading; //to pervent repeated clicks that send duplicate requests
 }
 
 // ________________________________________________________________________________
 // ________________________________________________________________________________
-//Error cards 
+//Error cards
+
+// clears the alert are with clearing innerHTML, 
+// using it before showing another error and when the request for search start
+// need no parameters and return nothing
 export function clearError() {
   $('#alert-area').innerHTML = '';
 }
 
+// create a user friendly error message instead of logging the error to the console
+// parameter "message" is a string, its the error message that api.js throwed 
+// return nothing
 export function showError(message) {
   clearError();
   const card = document.createElement('div');
@@ -83,6 +107,15 @@ export function showError(message) {
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 //Popup card on the map
+
+// this function used to build full popup card to display on the place on the map.
+// parameters; "place" is object for location have its[name,country,lat,lon], "w" is weather objecy came from getweather 
+//    the third parameter is object that directly destructed into:
+//      "onShare" a function that executed when facebook button clicked
+//      "onCopy" asynchronous function that return true or false 
+//      "onFavorite" function return true if the place marked as favorite
+//      "isFavorite" boolean value, that determine the initial display/state of the favorite button
+// returns element that ready to use, that app.js pass to showPlace in map .js as popup content
 export function buildPopup(place, w, {onShare, onCopy, onFavorite, isFavorite }) {
   const box = document.createElement('div');
   box.className = 'popup';
@@ -104,21 +137,23 @@ export function buildPopup(place, w, {onShare, onCopy, onFavorite, isFavorite })
       <button type="button" class="btn btn-soft copy-btn">Copy weather text</button>
       <button type="button" class="btn btn-soft fav-btn"></button>
     </div>
-    `;
+  `;
 
-    // for facebook share btn
-    box.querySelector('.share-btn').addEventListener('click', onShare);
-    // copy weather btn
-    const copyBtn = box.querySelector('.copy-btn');
-    copyBtn.addEventListener('click', async () => {
-    copyBtn.textContent = (await onCopy()) ? 'Copied!' : 'Copy failed';
-    setTimeout(() => { copyBtn.textContent = 'Copy weather text'; }, 2000);
-    });
-    // for adding favorite city
-    const favBtn = box.querySelector('.fav-btn');
-    const showFavText = (saved) => { favBtn.textContent = saved ? '★ Saved' : '☆ Add to favorites'; };
-    showFavText(isFavorite);
-    favBtn.addEventListener('click', () => showFavText(onFavorite()));
+  // for facebook share btn
+  box.querySelector('.share-btn').addEventListener('click', onShare);
+
+  // copy weather btn
+  const copyBtn = box.querySelector('.copy-btn');
+  copyBtn.addEventListener('click', async () => { //async cuz it waits for onCopy
+    copyBtn.textContent = (await onCopy()) ? 'Copied!' : 'Copy failed'; 
+    setTimeout(() => { copyBtn.textContent = 'Copy weather text'; }, 2000); //display the original text after two seconds
+  });
+
+  // for adding favorite city
+  const favBtn = box.querySelector('.fav-btn');
+  const showFavText = (saved) => { favBtn.textContent = saved ? '★ Saved' : '☆ Add to favorites'; };
+  showFavText(isFavorite);
+  favBtn.addEventListener('click', () => showFavText(onFavorite()));
 
   return box;
 }
@@ -127,6 +162,14 @@ export function buildPopup(place, w, {onShare, onCopy, onFavorite, isFavorite })
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 //Favorites / history chips 
+
+// this a single function used for both favorites and history, will let favorites have a delete button but the history dont have
+// parameters; "container" the element whaere the buttons will be placed 
+//        "places" an array of places
+//        "emptyText" a text displayed when there ar no items
+//        "onSelect(place)" a function that run when the button clicked 
+//        "onRemove(place)" its optional to pass , if passes then  "×" button will appear for each item
+// returns nothing
 export function renderChips(container, places, emptyText, onSelect, onRemove) {
   container.innerHTML = '';
   if (places.length === 0) {
@@ -160,11 +203,18 @@ export function renderChips(container, places, emptyText, onSelect, onRemove) {
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 //Suggestions
+
+//this function used to hide the list and clear it
+// need no parameters and return nothing
 export function hideSuggestions() {
   $('#suggestions').hidden = true;
   $('#suggestions').innerHTML = '';
 }
 
+// this function to full the suggestions list below the search field
+// parameters; "places" is the suggest results, an array of geocoding objects.  
+//        "onPick" is function that executed when a suggestion is selected
+// returns nothing
 export function renderSuggestions(places, onPick) {
   const box = $('#suggestions');
   box.innerHTML = '';
@@ -187,6 +237,10 @@ export function renderSuggestions(places, onPick) {
 // ________________________________________________________________________________
 // ________________________________________________________________________________
 //5 days forecast
+
+// this function used to display the cards for the five days forecasts
+// parameters; "place" is the location object. "days" is the array returned by 'groubDaily' where each element is{date,min,max,icon,desc}
+// return nothing
 export function renderForecast(place, days) {
   $('#forecast').hidden = false;
   $('#forecast-title').textContent = `five days forecast for ${placeLabel(place)}`;
