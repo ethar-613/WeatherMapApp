@@ -69,5 +69,25 @@ Everything runs in the browser with asynchronous requests (Fetch API, Promises, 
                      '''https://ethar-613.github.io/WeatherMapApp/'''
 2. click API key setup button and enter your OpenWeatherMap key
 
+## Project structure:
+
+```
+index.html          page structure
+css/
+  themes.css        color variables ans shadowes
+  style.css         all the styling and responsive rules
+js/
+  app.js            entry point, that connects the events and runs the main flow
+  api.js            all network requests and error messages
+  map.js            Leaflet map, marker and popup putting on the map
+  ui.js             builds and updates the page if any thing changes (popup, alerts, loader, lists)
+  storage.js        sessionStorage (for APIkey) and localStorage ( for favoritesa nd history)
+  share.js          Facebook share & copy weather text
+  helpers.js        small helper functions
+icons/
+  favicon.png       page icon
+```
+
+
 ## Data sources:
 Weather data by OpenWeatherMap - Map data by OpenStreetMap contributors - Map library: Leaflet
